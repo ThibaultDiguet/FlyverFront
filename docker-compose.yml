@@ -1,0 +1,32 @@
+#version: '3.8'
+#services:
+#  flyverfront_dev:
+#    container_name: flyverfront_dev
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    volumes:
+#      # Monte votre code pour le hot-reload
+#      - ./src:/usr/src/app/src:cached
+#      - /usr/src/app/node_modules
+#    ports:
+#      - "4200:4200"
+
+version: '3.8'
+
+services:
+  flyverfront_dev:
+    container_name: flyverfront_dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src:cached
+      - ./angular.json:/app/angular.json:cached
+      - ./tsconfig.json:/app/tsconfig.json:cached
+      - ./package.json:/app/package.json:cached
+      - ./package-lock.json:/app/package-lock.json:cached
+      # Attention: ne monte PAS node_modules
+    ports:
+      - "4200:4200"
+
