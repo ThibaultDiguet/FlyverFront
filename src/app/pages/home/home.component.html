@@ -1,2 +1,6 @@
 <!--<div class="text-red-500 bg-blue-500">aaaaaa</div>-->
 <button hlmBtn>Button</button>
+
+<div *ngIf="btable$ | async as btable">
+  <pre>{{ btable | json }}</pre>
+</div>
