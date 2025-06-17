@@ -3,23 +3,23 @@ import { CommonModule } from '@angular/common';
 import { AirportService } from '../../../services/airport.services';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-
+import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-airports',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HlmButtonDirective],
+  imports: [CommonModule, ReactiveFormsModule, HlmButtonDirective, UiNavbarComponent],
   templateUrl: './airports.component.html'
 })
 export class DashboardAirportsComponent implements OnInit {
   airports: any[] = [];
-  token = 'TOKEN_ICI'; // Remplace par le vrai token
+  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUwNzg1NTU0fQ.YRdi-bHjk1T5pMJ_WYWwoJI1hDbLAKfmIQp-Ny-IZMo';
   airportForm: FormGroup;
-  editMode = false;
-  editingId: number | null = null;
 
   constructor(
     private airportService: AirportService,
+    private router: Router,
     private fb: FormBuilder
   ) {
     this.airportForm = this.fb.group({
@@ -37,7 +37,7 @@ export class DashboardAirportsComponent implements OnInit {
   refresh() {
     this.airportService.getAirports(this.token).subscribe({
       next: (res) => {
-        this.airports = res.airports || (res.airport ? [res.airport] : []);
+        this.airports = Array.isArray(res) ? res : (res.airports || (res.airport ? [res.airport] : []));
       },
       error: () => {
         this.airports = [];
@@ -47,37 +47,19 @@ export class DashboardAirportsComponent implements OnInit {
 
   onSubmit() {
     if (this.airportForm.invalid) return;
-    const airportData = this.airportForm.value;
-    if (this.editMode && this.editingId !== null) {
-      this.airportService.updateAirport(this.token, this.editingId, airportData)
-        .subscribe(() => {
-          this.refresh();
-          this.cancelEdit();
-        });
-    } else {
-      this.airportService.createAirport(this.token, airportData)
-        .subscribe(() => {
-          this.refresh();
-          this.airportForm.reset();
-        });
-    }
+    const airportData = {
+      ...this.airportForm.value,
+      iata: this.airportForm.value.iata?.toUpperCase() || ''
+    };
+    this.airportService.createAirport(this.token, airportData)
+      .subscribe(() => {
+        this.refresh();
+        this.airportForm.reset();
+      });
   }
 
   edit(airport: any) {
-    this.editMode = true;
-    this.editingId = airport.id_airport;
-    this.airportForm.patchValue({
-      name: airport.name,
-      iata: airport.iata,
-      city: airport.city,
-      country: airport.country
-    });
-  }
-
-  cancelEdit() {
-    this.editMode = false;
-    this.editingId = null;
-    this.airportForm.reset();
+    this.router.navigate(['/dashboard/airports/edit', airport.id_airport]);
   }
 
   delete(airport: any) {

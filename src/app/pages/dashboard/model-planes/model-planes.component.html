@@ -1,3 +1,5 @@
+<ui-navbar></ui-navbar>
+
 <h2 class="text-2xl font-bold mb-4">Liste des modèles d'avion</h2>
 
 <h3 class="text-lg font-semibold mb-2">
@@ -11,7 +13,7 @@
   <button hlmBtn type="submit" [attr.variant]="editMode ? 'outline' : 'default'" [attr.size]="'sm'">
     {{ editMode ? 'Modifier' : 'Créer' }}
   </button>
-  <button hlmBtn type="button" attr.variant="secondary" attr.size="sm" *ngIf="editMode" (click)="cancelEdit()">Annuler</button>
+  <button hlmBtn type="button" *ngIf="editMode" (click)="cancelEdit()">Annuler</button>
 </form>
 
 <button hlmBtn (click)="refresh()" class="mb-4">Rafraîchir</button>
@@ -30,7 +32,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let model of modelPlanes" class="hover:bg-muted/50 transition">
-          <td class="border px-3 py-2">{{ model.id_model_plane }}</td>
+          <td class="border px-3 py-2">{{ model.id_model }}</td>
           <td class="border px-3 py-2">{{ model.name }}</td>
           <td class="border px-3 py-2">{{ model.manufacturer }}</td>
           <td class="border px-3 py-2">{{ model.capacity }}</td>

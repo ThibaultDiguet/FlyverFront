@@ -5,28 +5,31 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AirportService {
-  private apiUrl = 'http://localhost:8000/airport';
+  private apiUrl = 'http://localhost:8000/airports';
 
   constructor(private http: HttpClient) {}
 
-  getAirports(token: string, id?: number, name?: string): Observable<any> {
-    let params = new HttpParams();
-    if (id) params = params.set('id', id);
-    if (name) params = params.set('name', name);
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<any>(this.apiUrl, { headers, params });
+  getAirports(token: string,): Observable<any> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      });
+      return this.http.get<any>(this.apiUrl, { headers });
   }
 
   createAirport(token: string, airport: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put<any>(this.apiUrl, airport, { headers });
+    return this.http.post<any>(this.apiUrl, airport, { headers });
+  }
+
+  getAirport(token: string, id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<any>(`${this.apiUrl}/${id}`, { headers });
   }
 
   updateAirport(token: string, id: number, airportUpdate: any): Observable<any> {
@@ -34,18 +37,16 @@ export class AirportService {
       'Authorization': `Bearer ${token}`
     });
     let params = new HttpParams().set('id', id);
-    return this.http.patch<any>(this.apiUrl, airportUpdate, { headers, params });
+    return this.http.put<any>(`${this.apiUrl}/${id}`, airportUpdate, { headers });
   }
 
   deleteAirport(token: string, id?: number, name?: string): Observable<any> {
-    let params = new HttpParams();
-    if (id) params = params.set('id', id);
-    if (name) params = params.set('name', name);
-
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-
-    return this.http.delete<any>(this.apiUrl, { headers, params });
+    if (id === undefined) {
+      throw new Error('id is required for deleteAirport');
+    }
+    return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers });
   }
 }

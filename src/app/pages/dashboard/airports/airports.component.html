@@ -1,18 +1,15 @@
+<ui-navbar></ui-navbar>
+
 <h2 class="text-2xl font-bold mb-4">Liste des aéroports</h2>
 
-<h3 class="text-lg font-semibold mb-2">
-  {{ editMode ? 'Modifier un aéroport' : 'Créer un aéroport' }}
-</h3>
+<h3 class="text-lg font-semibold mb-2">Créer un aéroport</h3>
 
 <form [formGroup]="airportForm" (ngSubmit)="onSubmit()" class="mb-6 flex flex-wrap gap-3 items-end bg-muted p-4 rounded shadow">
   <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-40" formControlName="name" placeholder="Nom" required />
   <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-24 uppercase" formControlName="iata" placeholder="IATA" maxlength="3" required />
   <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-40" formControlName="city" placeholder="Ville" required />
   <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-40" formControlName="country" placeholder="Pays" required />
-  <button hlmBtn type="submit" [attr.variant]="editMode ? 'outline' : 'default'" [attr.size]="'sm'">
-    {{ editMode ? 'Modifier' : 'Créer' }}
-  </button>
-  <button hlmBtn type="button" attr.variant="secondary" attr.size="sm" *ngIf="editMode" (click)="cancelEdit()">Annuler</button>
+  <button hlmBtn type="submit" variant="default" size="sm">Créer</button>
 </form>
 
 <button hlmBtn (click)="refresh()" class="mb-4">Rafraîchir</button>
