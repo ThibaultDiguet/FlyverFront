@@ -1,0 +1,50 @@
+<ui-navbar></ui-navbar>
+
+<h2 class="text-2xl font-bold mb-4">Liste des modèles d'avion</h2>
+
+<h3 class="text-lg font-semibold mb-2">
+  {{ editMode ? 'Modifier un modèle' : 'Créer un modèle' }}
+</h3>
+
+<form [formGroup]="modelPlaneForm" (ngSubmit)="onSubmit()" class="mb-6 flex flex-wrap gap-3 items-end bg-muted p-4 rounded shadow">
+  <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-40" formControlName="name" placeholder="Nom" required />
+  <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-40" formControlName="manufacturer" placeholder="Constructeur" required />
+  <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-24" type="number" formControlName="capacity" placeholder="Capacité" required />
+  <button hlmBtn type="submit" [attr.variant]="editMode ? 'outline' : 'default'" [attr.size]="'sm'">
+    {{ editMode ? 'Modifier' : 'Créer' }}
+  </button>
+  <button hlmBtn type="button" *ngIf="editMode" (click)="cancelEdit()">Annuler</button>
+</form>
+
+<button hlmBtn (click)="refresh()" class="mb-4">Rafraîchir</button>
+
+<div *ngIf="modelPlanes?.length; else noData">
+  <div class="overflow-x-auto rounded shadow">
+    <table class="table-auto w-full border bg-white">
+      <thead class="bg-muted">
+        <tr>
+          <th class="border px-3 py-2">ID</th>
+          <th class="border px-3 py-2">Nom</th>
+          <th class="border px-3 py-2">Constructeur</th>
+          <th class="border px-3 py-2">Capacité</th>
+          <th class="border px-3 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let model of modelPlanes" class="hover:bg-muted/50 transition">
+          <td class="border px-3 py-2">{{ model.id_model }}</td>
+          <td class="border px-3 py-2">{{ model.name }}</td>
+          <td class="border px-3 py-2">{{ model.manufacturer }}</td>
+          <td class="border px-3 py-2">{{ model.capacity }}</td>
+          <td class="border px-3 py-2 flex gap-2">
+            <button hlmBtn variant="outline" size="sm" (click)="edit(model)">Modifier</button>
+            <button hlmBtn variant="destructive" size="sm" (click)="delete(model)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #noData>
+  <p class="text-center text-muted-foreground mt-8">Aucun modèle trouvé.</p>
+</ng-template>
