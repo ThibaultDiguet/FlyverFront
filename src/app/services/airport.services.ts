@@ -36,7 +36,6 @@ export class AirportService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    let params = new HttpParams().set('id', id);
     return this.http.put<any>(`${this.apiUrl}/${id}`, airportUpdate, { headers });
   }
 
