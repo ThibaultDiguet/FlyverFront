@@ -51,6 +51,7 @@ export class DashboardAirportsComponent implements OnInit {
       ...this.airportForm.value,
       iata: this.airportForm.value.iata?.toUpperCase() || ''
     };
+    console.log(airportData);
     this.airportService.createAirport(this.token, airportData)
       .subscribe(() => {
         this.refresh();

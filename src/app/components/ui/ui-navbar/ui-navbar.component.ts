@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
       <div class="font-bold text-xl tracking-wide">FlyverFront</div>
       <div class="flex gap-2">
         <a routerLink="/" hlmBtn variant="ghost">Accueil</a>
+        <a routerLink="/reservation" hlmBtn variant="ghost">Réservation</a>
         <a routerLink="/dashboard" hlmBtn variant="outline">Dashboard</a>
       </div>
     </nav>
