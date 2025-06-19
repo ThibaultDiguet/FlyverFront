@@ -32,6 +32,40 @@
         <label class="mb-1 font-medium text-sm text-muted-foreground">Pays</label>
         <input class="border px-3 py-2 rounded focus:outline-none focus:ring w-full" formControlName="country" placeholder="Pays" required />
       </div>
+
+      <div class="flex flex-col w-full">
+  <label class="mb-1 font-medium text-sm text-muted-foreground flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v6m0 0l-3-3m3 3l3-3M12 4v8" />
+    </svg>
+    Images (upload)
+  </label>
+  <button hlmBtn type="button" variant="outline" size="sm"
+          (click)="triggerFileInput()" class="w-fit mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    Ajouter une ou plusieurs images
+  </button>
+  <input #fileInput type="file" (change)="onImageSelected($event)" multiple accept="image/*"
+         class="hidden" />
+
+  <div class="flex flex-wrap gap-3 mt-2">
+    <div *ngFor="let ctrl of imageUrls.controls; let i = index" class="flex flex-col items-center gap-1">
+      <img *ngIf="ctrl.value" [src]="ctrl.value" alt="img"
+           class="h-16 w-16 object-cover rounded border shadow" />
+      <button hlmBtn type="button" variant="destructive" size="icon" (click)="removeImageUrl(i)" class="mt-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+      <span *ngIf="imageUrls.length === 0" class="text-xs text-muted-foreground mt-2">Aucune image sélectionnée</span>
+    </div>
+    <span class="text-xs text-muted-foreground mt-1">Formats acceptés : JPG, PNG, GIF. Plusieurs images possibles.</span>
+  </div>
+
+
       <div class="flex flex-col w-full sm:w-auto">
         <button hlmBtn type="submit" variant="default" size="sm" class="w-full sm:w-auto mt-4 sm:mt-0">Créer</button>
       </div>
@@ -57,6 +91,7 @@
             <th class="border px-3 py-2">Ville</th>
             <th class="border px-3 py-2">Pays</th>
             <th class="border px-3 py-2">Actions</th>
+            <th class="border px-3 py-2">Images</th>
           </tr>
         </thead>
         <tbody>
@@ -66,6 +101,14 @@
             <td class="border px-3 py-2 font-mono uppercase">{{ airport.iata }}</td>
             <td class="border px-3 py-2">{{ airport.city }}</td>
             <td class="border px-3 py-2">{{ airport.country }}</td>
+            <td class="border px-3 py-2">
+              <ng-container *ngIf="airport.image_urls?.length; else noImg">
+                <img *ngFor="let url of airport.image_urls" [src]="url" alt="img" class="inline-block h-8 w-8 rounded mr-1" />
+              </ng-container>
+              <ng-template #noImg>
+                <span class="text-xs text-muted-foreground">Aucune</span>
+              </ng-template>
+            </td>
             <td class="border px-3 py-2 flex gap-2">
               <button hlmBtn variant="outline" size="sm" (click)="edit(airport)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6" /></svg>
