@@ -7,12 +7,10 @@ import {AuthService} from '../services/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
-  // Ignorer les requêtes liées à l'auth (login, register, refresh)
   if (req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh')) {
     return next(req);
   }
 
-  //Ajout automatique de l'access token à toutes les requêtes
   return authService.accessToken$.pipe(
     filter(accessToken => accessToken !== null),
     mergeMap(accessToken => {

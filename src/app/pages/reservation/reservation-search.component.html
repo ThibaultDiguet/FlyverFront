@@ -1,0 +1,53 @@
+<ui-navbar></ui-navbar>
+<div class="max-w-3xl mx-auto mt-8 px-4">
+  <h2 class="text-3xl font-extrabold mb-6 flex items-center gap-2">
+    Rechercher un vol
+  </h2>
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex flex-col sm:flex-row gap-4 mb-6">
+    <input class="border px-3 py-2 rounded w-full" formControlName="departure_airport_id" placeholder="ID aéroport départ" required>
+    <input class="border px-3 py-2 rounded w-full" formControlName="arrival_airport_id" placeholder="ID aéroport arrivée" required>
+    <button hlmBtn type="submit" variant="default" [disabled]="searchForm.invalid || loading">Rechercher</button>
+  </form>
+  <div *ngIf="errorMsg" class="text-red-600 mb-4">{{ errorMsg }}</div>
+  <div *ngIf="flights.length > 0">
+    <h3 class="font-semibold mb-2">Vols trouvés :</h3>
+    <ul class="space-y-2">
+      <li *ngFor="let flight of flights" class="border rounded p-3 bg-muted/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <span>
+          Vol #{{ flight.id_flight }} — Avion {{ flight.plane_id }} ({{ flight.departure_airport_id }} → {{ flight.arrival_airport_id }})<br>
+          Départ : {{ flight.departure_time }} — Arrivée : {{ flight.arrival_time }}
+        </span>
+        <button hlmBtn type="button" variant="outline" (click)="reserver(flight)">Réserver</button>
+      </li>
+    </ul>
+  </div>
+
+
+
+  <div class="mt-10 mb-6">
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+      Prochains vols à venir
+    </h3>
+    <div *ngIf="pagedFlights.length > 0; else noUpcoming">
+      <ul class="space-y-2">
+        <li *ngFor="let flight of pagedFlights" class="border rounded p-3 bg-muted/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <span>
+            Vol #{{ flight.id_flight }} — Avion {{ flight.plane_id }} ({{ flight.departure_airport_id }} → {{ flight.arrival_airport_id }})<br>
+            Départ : {{ flight.departure_time | date:'short' }} — Arrivée : {{ flight.arrival_time | date:'short' }}
+          </span>
+          <button hlmBtn type="button" variant="outline" (click)="router.navigate(['/reservation', flight.id_flight])">
+            Réserver
+          </button>
+        </li>
+      </ul>
+      <div class="flex justify-center items-center gap-2 mt-4">
+        <button hlmBtn type="button" variant="outline" size="sm" (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+        <span class="text-sm">Page {{ currentPage }} / {{ totalPages }}</span>
+        <button hlmBtn type="button" variant="outline" size="sm" (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+      </div>
+    </div>
+    <ng-template #noUpcoming>
+      <div class="text-muted-foreground text-center">Aucun vol à venir.</div>
+    </ng-template>
+  </div>
+</div>

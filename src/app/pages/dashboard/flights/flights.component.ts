@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlaneService } from '../../../services/plane.services';
+import { FlightService } from '../../../services/flight.services';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.component';
@@ -8,25 +8,28 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from '../../../services/local-storage.service';
 
 @Component({
-  selector: 'app-dashboard-planes',
+  selector: 'app-dashboard-flights',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HlmButtonDirective, UiNavbarComponent],
-  templateUrl: './planes.component.html'
+  templateUrl: './flights.component.html'
 })
-export class DashboardPlanesComponent implements OnInit {
-  planes: any[] = [];
+export class DashboardFlightsComponent implements OnInit {
+  flights: any[] = [];
   token: string = '';
-  planeForm: FormGroup;
+  flightForm: FormGroup;
 
   constructor(
-    private planeService: PlaneService,
+    private flightService: FlightService,
     private localStorageService: LocalStorageService,
     private router: Router,
     private fb: FormBuilder
   ) {
-    this.planeForm = this.fb.group({
-      registration: [''],
-      model_id: [''],
+    this.flightForm = this.fb.group({
+      plane_id: [''],
+      departure_airport_id: [''],
+      arrival_airport_id: [''],
+      departure_time: [''],
+      arrival_time: [''],
     });
   }
 
@@ -36,33 +39,33 @@ export class DashboardPlanesComponent implements OnInit {
   }
 
   refresh() {
-    this.planeService.getPlanes(this.token).subscribe({
+    this.flightService.getFlights(this.token).subscribe({
       next: (res) => {
-        this.planes = Array.isArray(res) ? res : (res.planes || []);
+        this.flights = Array.isArray(res) ? res : (res.flights || []);
       },
       error: () => {
-        this.planes = [];
+        this.flights = [];
       }
     });
   }
 
   onSubmit() {
-    if (this.planeForm.invalid) return;
-    const planeData = this.planeForm.value;
-    this.planeService.createPlane(this.token, planeData)
+    if (this.flightForm.invalid) return;
+    const flightData = this.flightForm.value;
+    this.flightService.createFlight(this.token, flightData)
       .subscribe(() => {
         this.refresh();
-        this.planeForm.reset();
+        this.flightForm.reset();
       });
   }
 
-  edit(plane: any) {
-    this.router.navigate(['/dashboard/planes/edit', plane.id_plane]);
+  edit(flight: any) {
+    this.router.navigate(['/dashboard/flights/edit', flight.id_flight]);
   }
 
-  delete(plane: any) {
-    if (!plane) return;
-    this.planeService.deletePlane(this.token, plane.id_plane)
+  delete(flight: any) {
+    if (!flight) return;
+    this.flightService.deleteFlight(this.token, flight.id_flight)
       .subscribe(() => this.refresh());
   }
 }

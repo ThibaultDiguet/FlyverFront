@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.component';
 import { Router } from '@angular/router';
+import {LocalStorageService} from '../../../services/local-storage.service';
 
 @Component({
   selector: 'app-dashboard-model-planes',
@@ -14,13 +15,14 @@ import { Router } from '@angular/router';
 })
 export class DashboardModelPlanesComponent implements OnInit {
   modelPlanes: any[] = [];
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUwNzg1NTU0fQ.YRdi-bHjk1T5pMJ_WYWwoJI1hDbLAKfmIQp-Ny-IZMo';
+  token: string = '';
   modelPlaneForm: FormGroup;
   editMode = false;
   editingId: number | null = null;
 
   constructor(
     private modelPlaneService: ModelPlaneService,
+    private localStorageService: LocalStorageService,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -32,6 +34,7 @@ export class DashboardModelPlanesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.token = this.localStorageService.getItem('refresh_token') || '';
     this.refresh();
   }
 
