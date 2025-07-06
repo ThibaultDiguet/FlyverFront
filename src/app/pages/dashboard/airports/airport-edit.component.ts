@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AirportService } from '../../../services/airport.services';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.component';
+import {LocalStorageService} from '../../../services/local-storage.service';
 
 @Component({
   selector: 'app-airport-edit',
@@ -75,7 +76,7 @@ import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.co
 export class AirportEditComponent implements OnInit {
   airportForm: FormGroup;
   id: number;
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUwNzg1NTU0fQ.YRdi-bHjk1T5pMJ_WYWwoJI1hDbLAKfmIQp-Ny-IZMo';
+  token: string = '';
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -86,6 +87,7 @@ export class AirportEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private localStorageService: LocalStorageService,
     private airportService: AirportService,
     private router: Router
   ) {
@@ -100,6 +102,7 @@ export class AirportEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.token = this.localStorageService.getItem('refresh_token') || '';
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.airportService.getAirport(this.token, this.id).subscribe((airport: any) => {
       this.airportForm.patchValue({
@@ -108,7 +111,7 @@ export class AirportEditComponent implements OnInit {
         city: airport.city,
         country: airport.country
       });
-      // Remplit le FormArray avec les images existantes
+
       this.imageUrls.clear();
       if (airport.image_urls && Array.isArray(airport.image_urls)) {
         airport.image_urls.forEach((img: string) => this.imageUrls.push(this.fb.control(img)));

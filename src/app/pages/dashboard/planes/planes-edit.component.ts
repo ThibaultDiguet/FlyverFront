@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PlaneService } from '../../../services/plane.services';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.component';
+import {LocalStorageService} from '../../../services/local-storage.service';
 
 @Component({
   selector: 'app-plane-edit',
@@ -32,29 +33,29 @@ import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.co
 export class PlaneEditComponent implements OnInit {
   planeForm: FormGroup;
   id: number;
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUwNzg1NTU0fQ.YRdi-bHjk1T5pMJ_WYWwoJI1hDbLAKfmIQp-Ny-IZMo';
+  token: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    private localStorageService: LocalStorageService,
     private planeService: PlaneService,
     private router: Router
   ) {
     this.planeForm = this.fb.group({
       registration: ['', Validators.required],
       model: ['', Validators.required],
-      // Ajoute ici d'autres champs si besoin
     });
     this.id = 0;
   }
 
   ngOnInit() {
+    this.token = this.localStorageService.getItem('refresh_token') || '';
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     this.planeService.getPlane(this.token, this.id).subscribe((plane: any) => {
       this.planeForm.patchValue({
         registration: plane.registration,
         model: plane.model_id,
-        // Ajoute ici d'autres champs si besoin
       });
     });
   }

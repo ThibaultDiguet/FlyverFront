@@ -7,6 +7,8 @@ import { UiNavbarComponent } from '../../../components/ui/ui-navbar/ui-navbar.co
 import { Router } from '@angular/router';
 import { FormArray } from '@angular/forms';
 import { ViewChild, ElementRef } from '@angular/core';
+import {LocalStorageService} from '../../../services/local-storage.service';
+
 
 @Component({
   selector: 'app-dashboard-airports',
@@ -16,7 +18,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 })
 export class DashboardAirportsComponent implements OnInit {
   airports: any[] = [];
-  token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUwNzg1NTU0fQ.YRdi-bHjk1T5pMJ_WYWwoJI1hDbLAKfmIQp-Ny-IZMo';
+  token: string = '';
   airportForm: FormGroup;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -28,6 +30,7 @@ export class DashboardAirportsComponent implements OnInit {
   constructor(
     private airportService: AirportService,
     private router: Router,
+    private localStorageService: LocalStorageService,
     private fb: FormBuilder
   ) {
     this.airportForm = this.fb.group({
@@ -40,6 +43,7 @@ export class DashboardAirportsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.token = this.localStorageService.getItem('refresh_token') || '';
     this.refresh();
   }
 
