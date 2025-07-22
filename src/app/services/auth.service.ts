@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
 import {environment} from '../env/env';
 import {LocalStorageService} from './local-storage.service';
@@ -22,7 +22,9 @@ export class AuthService {
   ) {}
 
   register(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, data);
+    const headers = { 'Content-Type': 'application/json' };
+    console.log("zzzzz", data)
+    return this.http.post(`${this.apiUrl}/users`, JSON.stringify(data), { headers });
   }
 
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -70,5 +72,16 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.accessTokenSubject.value;
+  }
+
+  isAdmin(): boolean {
+    const userStr = this.localStorageService.getItem('user');
+    if (!userStr) return false;
+    try {
+      const user = JSON.parse(userStr);
+      return !!user.is_admin;
+    } catch {
+      return false;
+    }
   }
 }

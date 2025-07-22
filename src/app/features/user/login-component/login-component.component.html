@@ -1,3 +1,5 @@
+<ui-navbar></ui-navbar>
+
 <section class="w-full mx-auto p-5">
   <h2 class="font-semibold text-2xl text-zinc-800">Connexion</h2>
   <p class="text-sm font-light text-zinc-600 mb-4">Saisissez vos identifiants de connexion pour vous connecter au chat.</p>
@@ -48,3 +50,8 @@
     <small *ngIf="invalidCredentials" class="text-red-500 text-sm font-medium">Email ou mot de passe invalide.</small>
   </form>
 </section>
+
+  <div class="mt-4 text-center">
+    <span class="text-sm text-zinc-700">Pas encore de compte ?</span>
+    <a routerLink="/register" class="text-indigo-700 hover:underline font-medium ml-1">Créer un compte</a>
+  </div>

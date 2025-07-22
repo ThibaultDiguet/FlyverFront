@@ -14,20 +14,23 @@ import { ReservationComponent } from './pages/reservation/reservation.component'
 import { DashboardFlightsComponent } from './pages/dashboard/flights/flights.component';
 import { FlightEditComponent } from './pages/dashboard/flights/flights-edit.component';
 import { ReservationSearchComponent } from './pages/reservation/reservation-search.component';
+import { AdminGuard } from './guards/admin.guards';
+import { RegisterComponent } from './features/user/register-component/register-component.component';
 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'reservation', component: ReservationSearchComponent },
-  { path: 'reservation/:flightId', component: ReservationComponent },
+  { path: 'reservation', component: ReservationSearchComponent, canActivate: [AuthGuard] },
+  { path: 'reservation/:flightId', component: ReservationComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/airports', component: DashboardAirportsComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/airports/edit/:id', component: AirportEditComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/model-planes', component: DashboardModelPlanesComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/model-planes/edit/:id', component: ModelPlaneEditComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/planes', component: DashboardPlanesComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/planes/edit/:id', component: PlaneEditComponent, canActivate: [AuthGuard]},
-  { path: 'dashboard/flights', component: DashboardFlightsComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/flights/edit/:id', component: FlightEditComponent, canActivate: [AuthGuard] },
+  { path: 'register', component: RegisterComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/airports', component: DashboardAirportsComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/airports/edit/:id', component: AirportEditComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/model-planes', component: DashboardModelPlanesComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/model-planes/edit/:id', component: ModelPlaneEditComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/planes', component: DashboardPlanesComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/planes/edit/:id', component: PlaneEditComponent, canActivate: [AuthGuard, AdminGuard]},
+  { path: 'dashboard/flights', component: DashboardFlightsComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'dashboard/flights/edit/:id', component: FlightEditComponent, canActivate: [AuthGuard, AdminGuard] },
 ];
