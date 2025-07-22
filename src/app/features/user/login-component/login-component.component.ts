@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {NgClass, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../services/auth.service';
+import {UiNavbarComponent} from '../../../components/ui/ui-navbar/ui-navbar.component';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,8 @@ import {AuthService} from '../../../services/auth.service';
     FormsModule,
     ReactiveFormsModule,
     NgIf,
-    NgClass
+    NgClass,
+    UiNavbarComponent
   ],
   templateUrl: 'login-component.component.html',
   styleUrl: 'login-component.component.css'

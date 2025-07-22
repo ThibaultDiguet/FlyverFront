@@ -1,23 +1,24 @@
-<section class="md:w-[40%] mx-auto p-5 h-[100vh] flex flex-col  justify-center w-[90%]">
-  <div class="bg-white rounded-lg shadow-md p-6 border border-zinc-200">
-    <h2 class="font-semibold text-2xl text-zinc-800">Connexion</h2>
-    <p class="text-sm font-light text-zinc-600 mb-4">Saisissez vos identifiants de connexion pour vous connecter au chat.</p>
-    <form [formGroup]="loginForm" (ngSubmit)="submitForm()" class="flex flex-col gap-4">
-      <div class="mb-5">
-        <label for="email" class="block mb-2 text-sm font-medium text-zinc-800">Email</label>
-        <input
-          type="text"
-          id="email"
-          formControlName="email"
-          class="bg-gray-50 border border-gray-300 text-zinc-800 text-sm rounded-lg focus:ring-[#26a9e0] focus:border-[#26a9e0] block w-full p-2.5 " required
-          [ngClass]="{'border-red-500': isFieldInvalid('email')}"
-        />
-        <small *ngIf="isFieldInvalid('email')"
-              class="text-red-500 text-sm font-medium">
-          Entrez un email valide.
-        </small>
+<ui-navbar></ui-navbar>
 
-      </div>
+<section class="w-full mx-auto p-5">
+  <h2 class="font-semibold text-2xl text-zinc-800">Connexion</h2>
+  <p class="text-sm font-light text-zinc-600 mb-4">Saisissez vos identifiants de connexion pour vous connecter au chat.</p>
+  <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    <div class="mb-5">
+      <label for="email" class="block mb-2 text-sm font-medium text-zinc-800">Email</label>
+      <input
+        type="text"
+        id="email"
+        formControlName="email"
+        class="bg-gray-50 border border-gray-300 text-zinc-800 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 " required
+        [ngClass]="{'border-red-500': isFieldInvalid('email')}"
+      />
+      <small *ngIf="isFieldInvalid('email')"
+             class="text-red-500 text-sm font-medium">
+        Entrez un email valide.
+      </small>
+
+    </div>
       <div class="mb-5">
         <label for="password" class="block mb-2 text-sm font-medium text-zinc-800">Mot de passe</label>
         <input
@@ -50,3 +51,8 @@
     </form>
   </div>
 </section>
+
+  <div class="mt-4 text-center">
+    <span class="text-sm text-zinc-700">Pas encore de compte ?</span>
+    <a routerLink="/register" class="text-indigo-700 hover:underline font-medium ml-1">Créer un compte</a>
+  </div>
