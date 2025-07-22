@@ -1,13 +1,14 @@
 <ui-navbar></ui-navbar>
-<div class="max-w-3xl mx-auto mt-8 px-4">
+<div class="max-w-5xl mx-auto mt-8 px-4">
   <h2 class="text-3xl font-extrabold mb-6 flex items-center gap-2">
     Rechercher un vol
   </h2>
-  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex flex-col sm:flex-row gap-4 mb-6">
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="flex flex-col sm:flex-row gap-4 mt-10 mb-6 ">
     <input class="border px-3 py-2 rounded w-full" formControlName="departure_airport_id" placeholder="ID aéroport départ" required>
     <input class="border px-3 py-2 rounded w-full" formControlName="arrival_airport_id" placeholder="ID aéroport arrivée" required>
-    <button hlmBtn type="submit" variant="default" [disabled]="searchForm.invalid || loading">Rechercher</button>
+    <button class="bg-[#1c3149]" hlmBtn type="submit" variant="default" [disabled]="searchForm.invalid || loading">Rechercher</button>
   </form>
+  <div class="mt-12 mb-12 border-[#1c3149] border-1"></div>
   <div *ngIf="errorMsg" class="text-red-600 mb-4">{{ errorMsg }}</div>
   <div *ngIf="flights.length > 0">
     <h3 class="font-semibold mb-2">Vols trouvés :</h3>
